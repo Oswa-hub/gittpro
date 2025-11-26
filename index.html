@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboClub - Robotics Club</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Home Page -->
+    <div id="homePage">
+        <!-- Navigation -->
+        <nav>
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i data-lucide="cpu"></i>
+                    <span>RoboClub</span>
+                </div>
+                
+                <div class="nav-links">
+                    <a href="#about">About</a>
+                    <a href="#features">Features</a>
+                    <a href="#contact">Contact</a>
+                    <button class="btn btn-outline" onclick="showAuth('login')">Log In</button>
+                    <button class="btn btn-primary" onclick="showAuth('signup')">Sign Up</button>
+                </div>
+
+                <button class="menu-toggle" onclick="toggleMenu()">
+                    <i data-lucide="menu" id="menuIcon"></i>
+                </button>
+            </div>
+
+            <div class="mobile-menu" id="mobileMenu">
+                <div class="mobile-menu-content">
+                    <a href="#about" onclick="toggleMenu()">About</a>
+                    <a href="#features" onclick="toggleMenu()">Features</a>
+                    <a href="#contact" onclick="toggleMenu()">Contact</a>
+                    <button class="btn btn-outline" style="width: 100%;" onclick="showAuth('login'); toggleMenu()">Log In</button>
+                    <button class="btn btn-primary" style="width: 100%;" onclick="showAuth('signup'); toggleMenu()">Sign Up</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-content">
+                <h1>Build the Future with <span class="highlight">Robotics</span></h1>
+                <p>Join our dynamic community of innovators, designers, and technologists shaping tomorrow's robots today.</p>
+                <div class="hero-buttons">
+                    <button class="btn-hero btn-primary" onclick="showAuth('signup')">Join Our Club</button>
+                    <a href="#about" class="btn-hero btn-outline">Learn More</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div id="about" class="about">
+            <div class="about-content">
+                <h2 class="section-title">About Our Club</h2>
+                <p>
+                    Our club is a dynamic community for students passionate about robots, innovation, and emerging technologies. 
+                    We work together to design, build, and program robots while exploring fields like artificial intelligence, 
+                    automation, and electronics. Through workshops, team projects, and competitions, we develop both technical 
+                    and creative problem-solving skills. Our goal is to inspire members to think differently, push boundaries, 
+                    and turn ideas into real, functioning prototypes. Whether you're a beginner or advanced, our club is the 
+                    perfect space to learn, collaborate, and shape the future of technology.
+                </p>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div id="features" class="features">
+            <div class="about-content">
+                <h2 class="section-title">What We Offer</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i data-lucide="users"></i>
+                        <h3>Community</h3>
+                        <p>Connect with like-minded innovators and build lasting friendships</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="cpu"></i>
+                        <h3>Hands-on Projects</h3>
+                        <p>Work on real robots from concept to completion</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="lightbulb"></i>
+                        <h3>Workshops</h3>
+                        <p>Learn cutting-edge technologies through expert-led sessions</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="trophy"></i>
+                        <h3>Competitions</h3>
+                        <p>Showcase your skills in local and international events</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div id="contact" class="contact">
+            <div class="about-content">
+                <h2 class="section-title">Get In Touch</h2>
+                <p>Have questions? Want to collaborate? We'd love to hear from you!</p>
+                <button class="btn-hero btn-primary">Contact Us</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="auth-page hidden">
+        <div class="auth-container">
+            <div class="auth-header">
+                <i data-lucide="cpu"></i>
+                <h2>Welcome Back</h2>
+                <p>Log in to access your account</p>
+            </div>
+
+            <div id="loginMessage"></div>
+
+            <div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="mail"></i>
+                        <input type="email" id="loginEmail" class="form-input" placeholder="your@email.com">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="lock"></i>
+                        <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" onkeypress="handleLoginEnter(event)">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; padding: 0.75rem;" onclick="handleLogin()" id="loginBtn">
+                    Log In
+                </button>
+            </div>
+
+            <div class="auth-footer">
+                <p>
+                    Don't have an account? 
+                    <button onclick="showAuth('signup')">Sign Up</button>
+                </p>
+                <button class="back-link" onclick="showAuth('home')">← Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Page -->
+    <div id="signupPage" class="auth-page hidden">
+        <div class="auth-container signup-container">
+            <div class="auth-header">
+                <i data-lucide="cpu"></i>
+                <h2>Join Our Club</h2>
+                <p>Create your account and start building</p>
+            </div>
+
+            <div id="signupMessage"></div>
+
+            <div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="user"></i>
+                            <input type="text" id="signupName" class="form-input" placeholder="John Doe">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="mail"></i>
+                            <input type="email" id="signupEmail" class="form-input" placeholder="your@email.com">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Password *</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="lock"></i>
+                            <input type="password" id="signupPassword" class="form-input" placeholder="Min. 6 characters">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm Password *</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="lock"></i>
+                            <input type="password" id="signupConfirmPassword" class="form-input" placeholder="Confirm password">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <div class="input-wrapper">
+                            <i data-lucide="phone"></i>
+                            <input type="tel" id="signupPhone" class="form-input" placeholder="+1234567890">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="address-section">
+                    <div class="address-header">
+                        <i data-lucide="map-pin"></i>
+                        <h3>Address (Optional)</h3>
+                    </div>
+                    
+                    <div class="address-grid">
+                        <input type="text" id="signupStreet" class="form-input" placeholder="Street">
+                        <input type="text" id="signupCity" class="form-input" placeholder="City">
+                        <input type="text" id="signupZip" class="form-input" placeholder="Zip Code">
+                        <input type="text" id="signupCountry" class="form-input" placeholder="Country">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; padding: 0.75rem; margin-top: 1.5rem;" onclick="handleRegister()" id="signupBtn">
+                    Sign Up
+                </button>
+            </div>
+
+            <div class="auth-footer">
+                <p>
+                    Already have an account? 
+                    <button onclick="showAuth('login')">Log In</button>
+                </p>
+                <button class="back-link" onclick="showAuth('home')">← Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function showAuth(page) {
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('signupPage').classList.add('hidden');
+            
+            if (page === 'home') {
+                document.getElementById('homePage').classList.remove('hidden');
+                window.scrollTo(0, 0);
+            } else {
+                document.getElementById(page + 'Page').classList.remove('hidden');
+            }
+            
+            setTimeout(() => lucide.createIcons(), 0);
+        }
+    </script>
+</body>
+</html>

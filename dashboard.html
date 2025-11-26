@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboClub - Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="dashboard-page">
+        <nav>
+            <div class="nav-container" style="margin-top: 0px;">
+                <div class="nav-logo" onclick="showDashboardTab('overview')">
+                    <i data-lucide="cpu"></i>
+                    <span>RoboClub Dashboard</span>
+                </div>
+                
+                <div class="nav-links">
+                    <a onclick="showDashboardTab('overview')">Dashboard</a>
+                    <a onclick="showDashboardTab('products')">Robots</a>
+                    <a onclick="showDashboardTab('quiz')">Quiz</a>
+                    <a href="profile.html">Profile</a>
+                    <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
+                </div>
+
+                <button class="menu-toggle" onclick="toggleMenu()">
+                    <i data-lucide="menu" id="menuIcon2"></i>
+                </button>
+            </div>
+
+            <div class="mobile-menu" id="mobileMenu2">
+                <div class="mobile-menu-content">
+                    <a onclick="showDashboardTab('overview'); toggleMenu()">Dashboard</a>
+                    <a onclick="showDashboardTab('products'); toggleMenu()">Robots</a>
+                    <a onclick="showDashboardTab('quiz'); toggleMenu()">Quiz</a>
+                    <a href="profile.html">Profile</a>
+                    <button class="btn btn-danger" style="width: 100%;" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <h1>Welcome back, <span id="userName">Member</span>!</h1>
+                <p>Manage your robotics journey</p>
+            </div>
+
+            <div class="dashboard-nav">
+                <button class="active" onclick="showDashboardTab('overview')">Overview</button>
+                <button onclick="showDashboardTab('products')">Robots</button>
+                <button onclick="showDashboardTab('quiz')">Quiz</button>
+            </div>
+
+            <!-- Overview Tab -->
+            <div id="overviewTab" class="dashboard-content">
+                <h2 class="section-title">Dashboard Overview</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>QUIZ SCORE</h4>
+                        <div class="stat-value" id="dashboardQuizScore">--</div>
+                        <div class="stat-label">Last attempt</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>ROBOTS VIEWED</h4>
+                        <div class="stat-value">24</div>
+                        <div class="stat-label">Total products</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>MEMBER SINCE</h4>
+                        <div class="stat-value" id="memberSince">2024</div>
+                        <div class="stat-label">Join date</div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3><i data-lucide="calendar"></i> Upcoming Events</h3>
+                    <div class="events-list">
+                        <div class="event-card">
+                            <div class="event-date">
+                                <span class="day">15</span>
+                                <span class="month">DEC</span>
+                            </div>
+                            <div class="event-details">
+                                <h3>Arduino Workshop</h3>
+                                <p>Learn the basics of Arduino programming and circuit design</p>
+                            </div>
+                        </div>
+                        <div class="event-card">
+                            <div class="event-date">
+                                <span class="day">22</span>
+                                <span class="month">DEC</span>
+                            </div>
+                            <div class="event-details">
+                                <h3>Robot Competition</h3>
+                                <p>Annual line-following robot competition</p>
+                            </div>
+                        </div>
+                        <div class="event-card">
+                            <div class="event-date">
+                                <span class="day">10</span>
+                                <span class="month">JAN</span>
+                            </div>
+                            <div class="event-details">
+                                <h3>AI & Machine Learning Talk</h3>
+                                <p>Guest speaker on robotics and artificial intelligence</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Tab -->
+            <div id="productsTab" class="dashboard-content hidden">
+                <h2 class="section-title">Available Robots</h2>
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Quiz Tab -->
+            <div id="quizTab" class="dashboard-content hidden">
+                <div class="quiz-container">
+                    <div id="quizStart">
+                        <div class="quiz-header">
+                            <h2>Test Your Robotics Knowledge!</h2>
+                            <p style="color: #9ca3af; margin-bottom: 2rem;">Answer 10 questions about robotics and our club</p>
+                        </div>
+                        <button class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.125rem;" onclick="startQuiz()">
+                            Start Quiz
+                        </button>
+                    </div>
+
+                    <div id="quizInProgress" class="hidden">
+                        <div class="quiz-header">
+                            <h2>Question <span id="currentQuestion">1</span> of 10</h2>
+                        </div>
+                        <div class="quiz-progress">
+                            <div class="quiz-progress-bar" id="quizProgressBar" style="width: 10%"></div>
+                        </div>
+                        <div id="quizQuestionContainer"></div>
+                        <div class="quiz-buttons">
+                            <button class="btn btn-secondary" onclick="previousQuestion()" id="prevBtn" disabled>Previous</button>
+                            <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn">Next</button>
+                        </div>
+                    </div>
+
+                    <div id="quizResults" class="hidden">
+                        <div class="quiz-result">
+                            <h2>Quiz Complete!</h2>
+                            <div class="quiz-score" id="finalScore">0/10</div>
+                            <div class="quiz-feedback" id="quizFeedback"></div>
+                            <button class="btn btn-primary" onclick="retakeQuiz()">Retake Quiz</button>
+                            
+                            <div class="quiz-details">
+                                <h3>Your Answers:</h3>
+                                <div id="answersReview"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
