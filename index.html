@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <https://github.com/yahyabenther/gittpro/pull/3/conflict?name=index.html&base_oid=2f27906a48510849d77bd24680aebe69193b239c&head_oid=262f0253c7bd14a06e464b7bcccb252a3509d4cemeta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RoboClub - Robotics Club</title>
-    <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <!-- Home Page -->
@@ -22,8 +22,8 @@
                     <a href="#about">About</a>
                     <a href="#features">Features</a>
                     <a href="#contact">Contact</a>
-                    <button class="btn btn-outline" onclick="showPage('login')">Log In</button>
-                    <button class="btn btn-primary" onclick="showPage('signup')">Sign Up</button>
+                    <button class="btn btn-outline" onclick="showAuth('login')">Log In</button>
+                    <button class="btn btn-primary" onclick="showAuth('signup')">Sign Up</button>
                 </div>
 
                 <button class="menu-toggle" onclick="toggleMenu()">
@@ -36,8 +36,8 @@
                     <a href="#about" onclick="toggleMenu()">About</a>
                     <a href="#features" onclick="toggleMenu()">Features</a>
                     <a href="#contact" onclick="toggleMenu()">Contact</a>
-                    <button class="btn btn-outline" style="width: 100%;" onclick="showPage('login'); toggleMenu()">Log In</button>
-                    <button class="btn btn-primary" style="width: 100%;" onclick="showPage('signup'); toggleMenu()">Sign Up</button>
+                    <button class="btn btn-outline" style="width: 100%;" onclick="showAuth('login'); toggleMenu()">Log In</button>
+                    <button class="btn btn-primary" style="width: 100%;" onclick="showAuth('signup'); toggleMenu()">Sign Up</button>
                 </div>
             </div>
         </nav>
@@ -48,7 +48,7 @@
                 <h1>Build the Future with <span class="highlight">Robotics</span></h1>
                 <p>Join our dynamic community of innovators, designers, and technologists shaping tomorrow's robots today.</p>
                 <div class="hero-buttons">
-                    <button class="btn-hero btn-primary" onclick="showPage('signup')">Join Our Club</button>
+                    <button class="btn-hero btn-primary" onclick="showAuth('signup')">Join Our Club</button>
                     <a href="#about" class="btn-hero btn-outline">Learn More</a>
                 </div>
             </div>
@@ -144,9 +144,9 @@
             <div class="auth-footer">
                 <p>
                     Don't have an account? 
-                    <button onclick="showPage('signup')">Sign Up</button>
+                    <button onclick="showAuth('signup')">Sign Up</button>
                 </p>
-                <button class="back-link" onclick="showPage('home')">← Back to Home</button>
+                <button class="back-link" onclick="showAuth('home')">← Back to Home</button>
             </div>
         </div>
     </div>
@@ -227,13 +227,29 @@
             <div class="auth-footer">
                 <p>
                     Already have an account? 
-                    <button onclick="showPage('login')">Log In</button>
+                    <button onclick="showAuth('login')">Log In</button>
                 </p>
-                <button class="back-link" onclick="showPage('home')">← Back to Home</button>
+                <button class="back-link" onclick="showAuth('home')">← Back to Home</button>
             </div>
         </div>
     </div>
 
     <script src="script.js"></script>
+    <script>
+        function showAuth(page) {
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('signupPage').classList.add('hidden');
+            
+            if (page === 'home') {
+                document.getElementById('homePage').classList.remove('hidden');
+                window.scrollTo(0, 0);
+            } else {
+                document.getElementById(page + 'Page').classList.remove('hidden');
+            }
+            
+            setTimeout(() => lucide.createIcons(), 0);
+        }
+    </script>
 </body>
 </html>
