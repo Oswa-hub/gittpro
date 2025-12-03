@@ -100,6 +100,11 @@ function showMessage(elementId, message, type) {
             messageEl.style.display = 'none';
         }, 5000);
     }
+    
+    if (profileStreet) profileStreet.textContent = addressData.street || '-';
+    if (profileCity) profileCity.textContent = addressData.city || '-';
+    if (profileZip) profileZip.textContent = addressData.zipCode || '-';
+    if (profileCountry) profileCountry.textContent = addressData.country || '-';
 }
 
 // Login Handler
@@ -113,6 +118,8 @@ async function handleLogin() {
     }
 
     try {
+        console.log('Attempting login with:', { email });
+        
         const response = await fetch(`${API_URL}/api/users/login`, {
             method: 'POST',
             headers: {
@@ -122,6 +129,7 @@ async function handleLogin() {
         });
 
         const data = await response.json();
+        console.log('Login API response:', data);
 
         if (response.ok) {
             showMessage('loginMessage', 'Login successful! Welcome back.', 'success');
@@ -134,6 +142,7 @@ async function handleLogin() {
             showMessage('loginMessage', data.message || 'Login failed. Please check your credentials.', 'error');
         }
     } catch (error) {
+        console.error('Login error:', error);
         showMessage('loginMessage', 'Connection error. Please try again.', 'error');
     }
 }
@@ -187,6 +196,8 @@ async function handleSignup() {
     };
 
     try {
+        console.log('Attempting registration with:', { name, email });
+        
         const response = await fetch(`${API_URL}/api/users/register`, {
             method: 'POST',
             headers: {
@@ -196,6 +207,7 @@ async function handleSignup() {
         });
 
         const data = await response.json();
+        console.log('Registration API response:', data);
 
         if (response.ok) {
             showMessage('signupMessage', 'Registration successful! Redirecting to login...', 'success');
@@ -218,6 +230,7 @@ async function handleSignup() {
             showMessage('signupMessage', data.message || 'Registration failed. Please try again.', 'error');
         }
     } catch (error) {
+        console.error('Registration error:', error);
         showMessage('signupMessage', 'Connection error. Please try again.', 'error');
     }
 }

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - RoboClub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="home-page">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="home.html" class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                    RoboClub
+                </a>
+                <div class="nav-links">
+                    <a href="home.html">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="features.html">Features</a>
+                    <a href="robots.html">Robots</a>
+                    <a href="quiz.html">Quiz</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="login.html" class="btn btn-outline">Log In</a>
+                    <a href="signup.html" class="btn btn-primary">Sign Up</a>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            </div>
+            <!-- Mobile Menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <a href="home.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="features.html">Features</a>
+                <a href="robots.html">Robots</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="contact.html">Contact</a>
+                <a href="login.html" class="btn btn-outline" style="margin: 10px 0;">Log In</a>
+                <a href="signup.html" class="btn btn-primary">Sign Up</a>
+            </div>
+        </nav>
+
+        <!-- Features Hero -->
+        <section class="hero" style="padding-top: 150px; padding-bottom: 60px;">
+            <h1>What We <span class="highlight">Offer</span></h1>
+            <p style="max-width: 600px; margin: 0 auto;">Discover the amazing opportunities and resources available to our members</p>
+        </section>
+
+        <!-- Main Features Section -->
+        <section class="section">
+            <div class="section-container">
+                <h2>Core Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <h3>Community</h3>
+                        <p>Connect with like-minded innovators and build lasting friendships. Join a network of over 500 passionate members who share your interests in robotics and technology.</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                        <h3>Hands-on Projects</h3>
+                        <p>Work on real robots from concept to completion. Get access to state-of-the-art equipment and tools to bring your ideas to life.</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <h3>Workshops</h3>
+                        <p>Learn cutting-edge technologies through expert-led sessions. Weekly workshops cover Arduino, Raspberry Pi, AI, machine learning, and more.</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                            <path d="M4 22h16"></path>
+                            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                        </svg>
+                        <h3>Competitions</h3>
+                        <p>Showcase your skills in local and international events. We participate in prestigious robotics competitions and have won over 25 awards.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Additional Benefits -->
+        <section class="section section-alt">
+            <div class="section-container">
+                <h2>Member Benefits</h2>
+                <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                    <div class="feature-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                        </svg>
+                        <h3>Learning Resources</h3>
+                        <p>Access to extensive library of tutorials, documentation, and online courses</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                            <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                        </svg>
+                        <h3>Equipment Access</h3>
+                        <p>Free access to 3D printers, soldering stations, and advanced robotics kits</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <h3>Mentorship</h3>
+                        <p>One-on-one guidance from experienced members and industry professionals</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                            <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                            <line x1="6" y1="18" x2="6.01" y2="18"></line>
+                        </svg>
+                        <h3>Lab Space</h3>
+                        <p>24/7 access to dedicated workspace with high-speed internet and power outlets</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <h3>Flexible Schedule</h3>
+                        <p>Events and workshops scheduled at convenient times for all members</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <h3>Online Community</h3>
+                        <p>Active Discord server for discussions, help, and collaboration</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Workshop Schedule -->
+        <section class="section">
+            <div class="section-container">
+                <h2>Upcoming Workshops</h2>
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <div class="feature-card" style="margin-bottom: 24px;">
+                        <h3 style="color: #a855f7; margin-bottom: 8px;">Arduino Basics Workshop</h3>
+                        <p style="color: #d1d5db; margin-bottom: 8px;">Learn the fundamentals of Arduino programming and circuit design. Perfect for beginners!</p>
+                        <p style="color: #9ca3af; font-size: 0.9rem;">📅 Every Monday, 6:00 PM - 8:00 PM</p>
+                    </div>
+                    <div class="feature-card" style="margin-bottom: 24px;">
+                        <h3 style="color: #a855f7; margin-bottom: 8px;">Raspberry Pi & IoT</h3>
+                        <p style="color: #d1d5db; margin-bottom: 8px;">Build Internet of Things projects using Raspberry Pi. Connect sensors and create smart devices.</p>
+                        <p style="color: #9ca3af; font-size: 0.9rem;">📅 Every Wednesday, 5:30 PM - 7:30 PM</p>
+                    </div>
+                    <div class="feature-card" style="margin-bottom: 24px;">
+                        <h3 style="color: #a855f7; margin-bottom: 8px;">AI & Machine Learning</h3>
+                        <p style="color: #d1d5db; margin-bottom: 8px;">Explore artificial intelligence and implement ML algorithms for robotics applications.</p>
+                        <p style="color: #9ca3af; font-size: 0.9rem;">📅 Every Friday, 6:00 PM - 8:30 PM</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3 style="color: #a855f7; margin-bottom: 8px;">Robot Design & 3D Printing</h3>
+                        <p style="color: #d1d5db; margin-bottom: 8px;">Design custom robot parts using CAD software and bring them to life with 3D printing.</p>
+                        <p style="color: #9ca3af; font-size: 0.9rem;">📅 Every Saturday, 2:00 PM - 5:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section section-alt">
+            <div class="section-container" style="text-align: center;">
+                <h2>Ready to Get Started?</h2>
+                <p style="color: #d1d5db; margin-bottom: 32px; font-size: 1.2rem;">Join us and unlock all these amazing features and more!</p>
+                <a href="signup.html" class="btn btn-primary" style="padding: 18px 40px; font-size: 18px;">Join RoboClub Today</a>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
