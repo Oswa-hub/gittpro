@@ -1,9 +1,474 @@
 const API_URL = 'https://backnode-50az.onrender.com';
 let currentUser = null;
-let userToken = null;
-let isEditMode = false;
 
-// Quiz data
+// Initialize Navigation Based on Login Status
+function initializeNavigation() {
+    const token = localStorage.getItem('userToken');
+    const isLoggedIn = !!token;
+    
+    const navLinks = document.getElementById('navLinks');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (!navLinks) return;
+
+    if (isLoggedIn) {
+        // Logged in navigation
+        navLinks.innerHTML = `
+            <a href="home.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="features.html">Features</a>
+            <a href="robots.html">Robots</a>
+            <a href="quiz.html">Quiz</a>
+            <a href="contact.html">Contact</a>
+            <a href="profile.html">Profile</a>
+            <button class="btn btn-outline" onclick="handleLogout()" style="padding: 8px 16px;">Logout</button>
+        `;
+        
+        if (mobileMenu) {
+            mobileMenu.innerHTML = `
+                <a href="home.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="features.html">Features</a>
+                <a href="robots.html">Robots</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="contact.html">Contact</a>
+                <a href="profile.html">Profile</a>
+                <button class="btn btn-outline" onclick="handleLogout()" style="margin: 10px 0; width: 100%;">Logout</button>
+            `;
+        }
+    } else {
+        // Not logged in navigation - only home, contact, quiz
+        navLinks.innerHTML = `
+            <a href="home.html">Home</a>
+            <a href="contact.html">Contact</a>
+            <a href="quiz.html">Quiz</a>
+            <a href="login.html" class="btn btn-outline" style="padding: 8px 16px;">Log In</a>
+            <a href="signup.html" class="btn btn-primary" style="padding: 8px 16px;">Sign Up</a>
+        `;
+        
+        if (mobileMenu) {
+            mobileMenu.innerHTML = `
+                <a href="home.html">Home</a>
+                <a href="contact.html">Contact</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="login.html" class="btn btn-outline" style="margin: 10px 0; width: 100%;">Log In</a>
+                <a href="signup.html" class="btn btn-primary" style="width: 100%;">Sign Up</a>
+            `;
+        }
+    }
+}
+
+// Check if user can access quiz
+function checkQuizAccess() {
+    const token = localStorage.getItem('userToken');
+    const quizStart = document.getElementById('quizStart');
+    
+    if (quizStart && !token) {
+        quizStart.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 80px; height: 80px; color: #a855f7; margin: 0 auto 24px;">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <h1 style="font-size: 2.5rem; margin-bottom: 16px;">Quiz Locked</h1>
+            <p style="color: #d1d5db; margin-bottom: 32px; font-size: 1.2rem;">Please log in to take the quiz</p>
+            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                <a href="login.html" class="btn btn-primary" style="padding: 18px 40px; font-size: 18px;">Log In</a>
+                <a href="signup.html" class="btn btn-secondary" style="padding: 18px 40px; font-size: 18px;">Sign Up</a>
+            </div>
+        `;
+        return false;
+    }
+    return true;
+}
+
+// Mobile Menu Toggle
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    if (menu) {
+        menu.classList.toggle('active');
+    }
+}
+
+// Message Display
+function showMessage(elementId, message, type) {
+    const messageEl = document.getElementById(elementId);
+    if (messageEl) {
+        messageEl.className = `message ${type}`;
+        messageEl.textContent = message;
+        messageEl.style.display = 'block';
+        setTimeout(() => {
+            messageEl.style.display = 'none';
+        }, 5000);
+    }
+    
+    if (profileStreet) profileStreet.textContent = addressData.street || '-';
+    if (profileCity) profileCity.textContent = addressData.city || '-';
+    if (profileZip) profileZip.textContent = addressData.zipCode || '-';
+    if (profileCountry) profileCountry.textContent = addressData.country || '-';
+}
+
+// Login Handler
+async function handleLogin() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+
+    if (!email || !password) {
+        showMessage('loginMessage', 'Please fill in all fields', 'error');
+        return;
+    }
+
+    try {
+        console.log('Attempting login with:', { email });
+        
+        const response = await fetch(`${API_URL}/api/users/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+        console.log('Login API response:', data);
+
+        if (response.ok) {
+            showMessage('loginMessage', 'Login successful! Welcome back.', 'success');
+            localStorage.setItem('userToken', data.token);
+            localStorage.setItem('userData', JSON.stringify(data.user || { email }));
+            setTimeout(() => {
+                window.location.href = 'profile.html';
+            }, 1500);
+        } else {
+            showMessage('loginMessage', data.message || 'Login failed. Please check your credentials.', 'error');
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        showMessage('loginMessage', 'Connection error. Please try again.', 'error');
+    }
+}
+
+// Signup Handler
+async function handleSignup() {
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const confirmPassword = document.getElementById('signupConfirmPassword').value;
+    const phone = document.getElementById('signupPhone').value;
+    const street = document.getElementById('signupStreet').value;
+    const city = document.getElementById('signupCity').value;
+    const zipCode = document.getElementById('signupZipCode').value;
+    const country = document.getElementById('signupCountry').value;
+
+    // Validation
+    if (!name || !email || !password || !confirmPassword) {
+        showMessage('signupMessage', 'Please fill in all required fields', 'error');
+        return;
+    }
+
+    if (password.length < 6) {
+        showMessage('signupMessage', 'Password must be at least 6 characters', 'error');
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        showMessage('signupMessage', 'Passwords do not match!', 'error');
+        return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showMessage('signupMessage', 'Please enter a valid email address', 'error');
+        return;
+    }
+
+    const userData = {
+        name,
+        email,
+        password,
+        phone,
+        address: {
+            street,
+            city,
+            zipCode,
+            country
+        }
+    };
+
+    try {
+        console.log('Attempting registration with:', { name, email });
+        
+        const response = await fetch(`${API_URL}/api/users/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData)
+        });
+
+        const data = await response.json();
+        console.log('Registration API response:', data);
+
+        if (response.ok) {
+            showMessage('signupMessage', 'Registration successful! Redirecting to login...', 'success');
+            
+            // Clear form fields
+            document.getElementById('signupName').value = '';
+            document.getElementById('signupEmail').value = '';
+            document.getElementById('signupPassword').value = '';
+            document.getElementById('signupConfirmPassword').value = '';
+            document.getElementById('signupPhone').value = '';
+            document.getElementById('signupStreet').value = '';
+            document.getElementById('signupCity').value = '';
+            document.getElementById('signupZipCode').value = '';
+            document.getElementById('signupCountry').value = '';
+            
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+        } else {
+            showMessage('signupMessage', data.message || 'Registration failed. Please try again.', 'error');
+        }
+    } catch (error) {
+        console.error('Registration error:', error);
+        showMessage('signupMessage', 'Connection error. Please try again.', 'error');
+    }
+}
+
+// Logout Handler
+function handleLogout() {
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('userData');
+    window.location.href = 'home.html';
+}
+
+// Load Robots from Backend
+async function loadRobots() {
+    const container = document.getElementById('robotsContainer');
+    if (!container) return;
+    
+    try {
+        const response = await fetch(`${API_URL}/api/products`);
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch robots');
+        }
+
+        const data = await response.json();
+        const products = data.data || data;
+
+        if (!products || products.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 60px 20px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 64px; height: 64px; margin: 0 auto 16px; color: #9ca3af;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <h3 style="color: white; margin-bottom: 8px;">No Robots Available</h3>
+                    <p style="color: #9ca3af;">Check back soon for new robotics projects!</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = products.map(product => {
+            const stockStatus = product.stock === 0 ? 'out-of-stock' : 
+                               product.stock < 10 ? 'low-stock' : 'in-stock';
+            const stockText = product.stock === 0 ? 'Out of Stock' : 
+                             product.stock < 10 ? `Only ${product.stock} left` : 
+                             `${product.stock} in stock`;
+            
+            const hasDiscount = product.discount && product.discount.percentage > 0;
+            const finalPrice = hasDiscount ? 
+                (product.price * (1 - product.discount.percentage / 100)).toFixed(2) : 
+                product.price.toFixed(2);
+
+            const imageUrl = product.images && product.images.length > 0 ? 
+                product.images[0].url : null;
+
+            const stars = Math.round(product.rating?.average || 0);
+            const ratingStars = '★'.repeat(stars) + '☆'.repeat(5 - stars);
+
+            return `
+                <div class="robot-card">
+                    <div class="robot-image">
+                        ${hasDiscount ? `<div class="discount-badge">-${product.discount.percentage}% OFF</div>` : ''}
+                        ${imageUrl ? 
+                            `<img src="${imageUrl}" alt="${product.name}">` : 
+                            `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                            </svg>`
+                        }
+                        <div class="robot-badge">${product.category}</div>
+                    </div>
+                    <div class="robot-details">
+                        <div class="robot-header">
+                            <div>
+                                <h3>${product.name}</h3>
+                                ${product.brand ? `<div class="robot-brand">${product.brand}</div>` : ''}
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="robot-price">
+                                    ${hasDiscount ? `<span class="original-price">$${product.price.toFixed(2)}</span>` : ''}
+                                    $${finalPrice}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <p class="robot-description">${product.description}</p>
+                        
+                        ${product.tags && product.tags.length > 0 ? `
+                            <div class="robot-specs">
+                                ${product.tags.map(tag => `<span class="spec-tag">${tag}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="robot-footer">
+                            <div class="stock-info">
+                                <span class="stock-badge ${stockStatus}">${stockText}</span>
+                                ${product.rating && product.rating.count > 0 ? `
+                                    <div class="rating">
+                                        <span>${ratingStars}</span>
+                                        <span class="rating-count">(${product.rating.count})</span>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            ${product.isAvailable && product.stock > 0 ? `
+                                <a href="robot-detail.html?id=${product._id}" class="btn btn-primary" style="padding: 8px 20px;">View Details</a>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+    } catch (error) {
+        console.error('Error loading robots:', error);
+        container.innerHTML = `
+            <div style="text-align: center; padding: 60px 20px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 64px; height: 64px; margin: 0 auto 16px; color: #f87171;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+                <h3 style="color: white; margin-bottom: 8px;">Unable to Load Robots</h3>
+                <p style="color: #9ca3af;">There was an error connecting to the server. Please try again later.</p>
+                <button class="btn btn-primary" onclick="loadRobots()" style="margin-top: 16px;">Retry</button>
+            </div>
+        `;
+    }
+}
+
+// Contact Form Handler
+async function handleContactSubmit() {
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const subject = document.getElementById('contactSubject').value;
+    const message = document.getElementById('contactMessageText').value;
+
+    if (!name || !email || !subject || !message) {
+        showMessage('contactMessage', 'Please fill in all required fields', 'error');
+        return;
+    }
+
+    // Send email using mailto (opens user's email client)
+    const mailtoLink = `mailto:yahyabentaher45@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
+    window.location.href = mailtoLink;
+
+    showMessage('contactMessage', 'Opening your email client...', 'success');
+    
+    // Clear form
+    setTimeout(() => {
+        document.getElementById('contactName').value = '';
+        document.getElementById('contactEmail').value = '';
+        document.getElementById('contactSubject').value = '';
+        document.getElementById('contactMessageText').value = '';
+    }, 1000);
+}
+
+// Profile Functions
+function loadProfile() {
+    const userData = localStorage.getItem('userData');
+    if (!userData) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    currentUser = JSON.parse(userData);
+    
+    // Update display elements
+    document.getElementById('profileDisplayName').textContent = currentUser.name || 'User';
+    document.getElementById('profileDisplayEmail').textContent = currentUser.email || '';
+    document.getElementById('profileAvatar').textContent = (currentUser.name || 'U')[0].toUpperCase();
+    
+    document.getElementById('viewName').textContent = currentUser.name || '--';
+    document.getElementById('viewEmail').textContent = currentUser.email || '--';
+    document.getElementById('viewPhone').textContent = currentUser.phone || '--';
+    document.getElementById('viewRole').textContent = currentUser.role || 'Member';
+    
+    if (currentUser.address) {
+        document.getElementById('viewStreet').textContent = currentUser.address.street || '--';
+        document.getElementById('viewCity').textContent = currentUser.address.city || '--';
+        document.getElementById('viewZipCode').textContent = currentUser.address.zipCode || '--';
+        document.getElementById('viewCountry').textContent = currentUser.address.country || '--';
+    }
+    
+    if (currentUser.createdAt) {
+        const year = new Date(currentUser.createdAt).getFullYear();
+        document.getElementById('memberSince').textContent = year;
+    }
+}
+
+function toggleEditMode() {
+    const viewMode = document.getElementById('profileView');
+    const editMode = document.getElementById('profileEdit');
+    
+    if (viewMode.style.display === 'none') {
+        // Switch to view mode
+        viewMode.style.display = 'block';
+        editMode.style.display = 'none';
+    } else {
+        // Switch to edit mode
+        viewMode.style.display = 'none';
+        editMode.style.display = 'block';
+        
+        // Populate edit fields
+        document.getElementById('editName').value = currentUser.name || '';
+        document.getElementById('editEmail').value = currentUser.email || '';
+        document.getElementById('editPhone').value = currentUser.phone || '';
+        document.getElementById('editStreet').value = currentUser.address?.street || '';
+        document.getElementById('editCity').value = currentUser.address?.city || '';
+        document.getElementById('editZipCode').value = currentUser.address?.zipCode || '';
+        document.getElementById('editCountry').value = currentUser.address?.country || '';
+    }
+}
+
+async function saveProfile() {
+    const updatedData = {
+        name: document.getElementById('editName').value,
+        phone: document.getElementById('editPhone').value,
+        address: {
+            street: document.getElementById('editStreet').value,
+            city: document.getElementById('editCity').value,
+            zipCode: document.getElementById('editZipCode').value,
+            country: document.getElementById('editCountry').value
+        }
+    };
+
+    // Update local storage
+    currentUser = { ...currentUser, ...updatedData };
+    localStorage.setItem('userData', JSON.stringify(currentUser));
+
+    showMessage('profileMessage', 'Profile updated successfully!', 'success');
+    
+    // Switch back to view mode
+    toggleEditMode();
+    loadProfile();
+}
+
+// Quiz Functions
 const quizQuestions = [
     {
         question: "What does 'Arduino' refer to in robotics?",
@@ -61,624 +526,15 @@ let currentQuestionIndex = 0;
 let userAnswers = [];
 let quizScore = 0;
 
-// Mock products data
-const mockProducts = [
-    {
-        name: "Line Following Robot Kit",
-        description: "Complete kit for building a line-following robot with sensors",
-        price: 89.99,
-        stock: 15,
-        category: "Électronique"
-    },
-    {
-        name: "Arduino Starter Robot",
-        description: "Perfect for beginners, includes Arduino Uno and basic components",
-        price: 64.99,
-        stock: 23,
-        category: "Électronique"
-    },
-    {
-        name: "Obstacle Avoidance Robot",
-        description: "Autonomous robot with ultrasonic sensors",
-        price: 119.99,
-        stock: 8,
-        category: "Électronique"
-    },
-    {
-        name: "Robotic Arm Kit",
-        description: "4-DOF robotic arm with servo motors",
-        price: 149.99,
-        stock: 5,
-        category: "Électronique"
-    },
-    {
-        name: "Bluetooth Controlled Car",
-        description: "Control your robot car via smartphone",
-        price: 79.99,
-        stock: 12,
-        category: "Électronique"
-    },
-    {
-        name: "Humanoid Robot Kit",
-        description: "Advanced bipedal robot with multiple servos",
-        price: 299.99,
-        stock: 3,
-        category: "Électronique"
-    },
-    {
-        name: "Drone Building Kit",
-        description: "Build and program your own quadcopter",
-        price: 199.99,
-        stock: 0,
-        category: "Électronique"
-    },
-    {
-        name: "Robot Gripper Module",
-        description: "Add-on gripper for picking and placing objects",
-        price: 45.99,
-        stock: 18,
-        category: "Accessoire"
-    },
-    {
-        name: "Sensor Pack Pro",
-        description: "Collection of 15+ sensors for robotics projects",
-        price: 54.99,
-        stock: 20,
-        category: "Accessoire"
-    }
-];
-
-// Initialize Lucide icons and check auth status
-document.addEventListener('DOMContentLoaded', function() {
-    lucide.createIcons();
-    
-    // Check if user is logged in and load user data
-    initializeUserData();
-});
-
-function initializeUserData() {
-    const token = localStorage.getItem('userToken');
-    const user = localStorage.getItem('currentUser');
-    
-    console.log('Initializing user data...');
-    console.log('Token from localStorage:', token ? 'Present' : 'Missing');
-    console.log('User from localStorage:', user);
-    
-    if (token && user) {
-        userToken = token;
-        try {
-            currentUser = JSON.parse(user);
-            console.log('Current user data:', currentUser);
-            
-            // Update UI with user data immediately
-            updateUserUI();
-            
-            // If on profile page, load profile data
-            if (window.location.pathname.includes('profile.html')) {
-                loadProfileData();
-            }
-            
-            // Load products if on dashboard
-            if (window.location.pathname.includes('dashboard.html')) {
-                loadProducts();
-                updateDashboardData();
-            }
-            
-            // Redirect to dashboard if on login/signup pages and logged in
-            if (window.location.pathname.includes('index.html') && !window.location.hash.includes('login') && !window.location.hash.includes('signup')) {
-                window.location.href = 'dashboard.html';
-            }
-        } catch (error) {
-            console.error('Error parsing user data:', error);
-            handleLogout();
-        }
-    } else if (window.location.pathname.includes('dashboard.html') || 
-               window.location.pathname.includes('profile.html')) {
-        // Redirect to home if not authenticated
-        console.log('No user found, redirecting to index');
-        window.location.href = 'index.html';
-    }
-}
-
-function updateUserUI() {
-    if (!currentUser) {
-        console.log('No current user to update UI');
-        return;
-    }
-    
-    console.log('Updating UI with user data:', currentUser);
-    
-    // Update user name in dashboard and profile
-    const userNameElements = document.querySelectorAll('#userName');
-    userNameElements.forEach(element => {
-        if (element) {
-            element.textContent = currentUser.name || currentUser.email?.split('@')[0] || 'Member';
-        }
-    });
-    
-    // Update member since year in dashboard
-    if (document.getElementById('memberSince')) {
-        document.getElementById('memberSince').textContent = new Date().getFullYear();
-    }
-}
-
-function updateDashboardData() {
-    if (!currentUser) return;
-    
-    // Update quiz score if available
-    const quizScore = localStorage.getItem('quizScore');
-    if (quizScore && document.getElementById('dashboardQuizScore')) {
-        document.getElementById('dashboardQuizScore').textContent = `${quizScore}/10`;
-    }
-}
-
-// Load and display profile data
-function loadProfileData() {
-    console.log('Loading profile data for display...');
-    
-    if (!currentUser) {
-        console.log('No current user found for profile');
-        // Try to get from localStorage directly
-        const storedUser = localStorage.getItem('currentUser');
-        if (storedUser) {
-            currentUser = JSON.parse(storedUser);
-        } else {
-            console.log('No user data in localStorage');
-            return;
-        }
-    }
-    
-    console.log('Displaying profile for user:', currentUser);
-    displayProfileData(currentUser);
-}
-
-function displayProfileData(user) {
-    console.log('Displaying profile data:', user);
-    
-    if (!user) {
-        console.log('No user data to display');
-        return;
-    }
-    
-    // Personal Information
-    const profileName = document.getElementById('profileName');
-    const profileEmail = document.getElementById('profileEmail');
-    const profilePhone = document.getElementById('profilePhone');
-    const profileJoined = document.getElementById('profileJoined');
-    
-    if (profileName) profileName.textContent = user.name || '-';
-    if (profileEmail) profileEmail.textContent = user.email || '-';
-    if (profilePhone) profilePhone.textContent = user.phone || '-';
-    if (profileJoined) {
-        const joinDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : new Date().toLocaleDateString();
-        profileJoined.textContent = joinDate;
-    }
-    
-    // Address Information
-    const profileStreet = document.getElementById('profileStreet');
-    const profileCity = document.getElementById('profileCity');
-    const profileZip = document.getElementById('profileZip');
-    const profileCountry = document.getElementById('profileCountry');
-    
-    // Handle address data - check both nested and flat structure
-    let addressData = {};
-    
-    if (user.address && typeof user.address === 'object') {
-        // Address is nested in address object
-        addressData = user.address;
-    } else {
-        // Address might be at the root level
-        addressData = {
-            street: user.street,
-            city: user.city,
-            zipCode: user.zipCode,
-            country: user.country
-        };
-    }
-    
-    if (profileStreet) profileStreet.textContent = addressData.street || '-';
-    if (profileCity) profileCity.textContent = addressData.city || '-';
-    if (profileZip) profileZip.textContent = addressData.zipCode || '-';
-    if (profileCountry) profileCountry.textContent = addressData.country || '-';
-}
-
-// Enhanced login function with better data handling
-async function handleLogin() {
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    const btn = document.getElementById('loginBtn');
-    
-    if (!email || !password) {
-        showMessage('loginMessage', 'Please enter both email and password', 'error');
-        return;
-    }
-    
-    clearMessage('loginMessage');
-    btn.textContent = 'Logging in...';
-    btn.disabled = true;
-
-    try {
-        console.log('Attempting login with:', { email });
-        
-        const response = await fetch(`${API_URL}/api/users/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password })
-        });
-
-        const data = await response.json();
-        console.log('Login API response:', data);
-
-        if (response.ok) {
-            showMessage('loginMessage', 'Login successful! Redirecting...', 'success');
-            userToken = data.token;
-            
-            // Store complete user data - handle different response structures
-            currentUser = {
-                id: data.user?.id || data.id,
-                name: data.user?.name || data.name || email.split('@')[0],
-                email: data.user?.email || data.email || email,
-                phone: data.user?.phone || data.phone,
-                address: data.user?.address || data.address,
-                createdAt: data.user?.createdAt || data.createdAt,
-                // Include all data from response
-                ...data.user,
-                ...data
-            };
-            
-            // Clean up the user object
-            delete currentUser.token;
-            delete currentUser.password;
-            
-            console.log('Processed user data for storage:', currentUser);
-            
-            localStorage.setItem('userToken', userToken);
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            // Update UI immediately
-            updateUserUI();
-            
-            // Redirect to dashboard
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1500);
-        } else {
-            showMessage('loginMessage', data.message || 'Login failed. Please check your credentials.', 'error');
-        }
-    } catch (error) {
-        console.error('Login error:', error);
-        showMessage('loginMessage', 'Connection error. Please try again.', 'error');
-    } finally {
-        btn.textContent = 'Log In';
-        btn.disabled = false;
-    }
-}
-
-// Enhanced registration function
-async function handleRegister() {
-    const name = document.getElementById('signupName').value;
-    const email = document.getElementById('signupEmail').value;
-    const password = document.getElementById('signupPassword').value;
-    const confirmPassword = document.getElementById('signupConfirmPassword').value;
-    
-    if (!name || !email || !password) {
-        showMessage('signupMessage', 'Please fill in all required fields', 'error');
-        return;
-    }
-    
-    if (password !== confirmPassword) {
-        showMessage('signupMessage', 'Passwords do not match!', 'error');
-        return;
-    }
-    
-    const formData = {
-        name: name,
-        email: email,
-        password: password,
-        phone: document.getElementById('signupPhone').value || '',
-        address: {
-            street: document.getElementById('signupStreet').value || '',
-            city: document.getElementById('signupCity').value || '',
-            zipCode: document.getElementById('signupZip').value || '',
-            country: document.getElementById('signupCountry').value || ''
-        }
-    };
-    
-    const btn = document.getElementById('signupBtn');
-    clearMessage('signupMessage');
-    btn.textContent = 'Creating Account...';
-    btn.disabled = true;
-
-    try {
-        console.log('Attempting registration with:', { name, email });
-        
-        const response = await fetch(`${API_URL}/api/users/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
-        });
-
-        const data = await response.json();
-        console.log('Registration API response:', data);
-
-        if (response.ok) {
-            showMessage('signupMessage', 'Registration successful! You can now log in.', 'success');
-            
-            // Store user data if available
-            if (data.user || data.id) {
-                currentUser = {
-                    id: data.user?.id || data.id,
-                    name: data.user?.name || data.name || name,
-                    email: data.user?.email || data.email || email,
-                    phone: data.user?.phone || data.phone || formData.phone,
-                    address: data.user?.address || data.address || formData.address,
-                    createdAt: data.user?.createdAt || data.createdAt,
-                    ...data.user,
-                    ...data
-                };
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            }
-            
-            // Redirect to login after delay
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 2000);
-        } else {
-            showMessage('signupMessage', data.message || 'Registration failed. Please try again.', 'error');
-        }
-    } catch (error) {
-        console.error('Registration error:', error);
-        showMessage('signupMessage', 'Connection error. Please try again.', 'error');
-    } finally {
-        btn.textContent = 'Sign Up';
-        btn.disabled = false;
-    }
-}
-
-function toggleMenu() {
-    const menu = document.querySelector('.mobile-menu.active, #mobileMenu, #mobileMenu2, #mobileMenu3');
-    if (!menu) return;
-    
-    const icon = menu.previousElementSibling.querySelector('[data-lucide]');
-    menu.classList.toggle('active');
-    
-    if (menu.classList.contains('active')) {
-        icon.setAttribute('data-lucide', 'x');
-    } else {
-        icon.setAttribute('data-lucide', 'menu');
-    }
-    lucide.createIcons();
-}
-
-function showMessage(elementId, text, type) {
-    const messageDiv = document.getElementById(elementId);
-    if (messageDiv) {
-        messageDiv.className = `message ${type}`;
-        messageDiv.textContent = text;
-        setTimeout(() => {
-            messageDiv.innerHTML = '';
-        }, 5000);
-    }
-}
-
-function clearMessage(elementId) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.innerHTML = '';
-    }
-}
-
-function handleLoginEnter(event) {
-    if (event.key === 'Enter') {
-        handleLogin();
-    }
-}
-
-function handleLogout() {
-    userToken = null;
-    currentUser = null;
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('quizScore');
-    window.location.href = 'index.html';
-}
-
-function loadProducts() {
-    const grid = document.getElementById('productsGrid');
-    if (!grid) return;
-    
-    grid.innerHTML = '';
-    
-    mockProducts.forEach(product => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.innerHTML = `
-            <div class="product-image">
-                <i data-lucide="cpu"></i>
-            </div>
-            <div class="product-info">
-                <h3>${product.name}</h3>
-                <p>${product.description}</p>
-                <div class="product-footer">
-                    <div class="product-price">$${product.price}</div>
-                    <div class="product-stock ${product.stock === 0 ? 'out-of-stock' : ''}">
-                        ${product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-                    </div>
-                </div>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
-    
-    setTimeout(() => lucide.createIcons(), 0);
-}
-
-function toggleEditMode() {
-    isEditMode = !isEditMode;
-    const profileInfo = document.getElementById('profileInfo');
-    const addressInfo = document.getElementById('addressInfo');
-    
-    if (isEditMode) {
-        profileInfo.classList.add('edit-mode');
-        addressInfo.classList.add('edit-mode');
-        
-        // Convert text to input fields with current values
-        const name = document.getElementById('profileName').textContent;
-        const email = document.getElementById('profileEmail').textContent;
-        const phone = document.getElementById('profilePhone').textContent;
-        const street = document.getElementById('profileStreet').textContent;
-        const city = document.getElementById('profileCity').textContent;
-        const zip = document.getElementById('profileZip').textContent;
-        const country = document.getElementById('profileCountry').textContent;
-        
-        document.getElementById('profileName').innerHTML = `<input type="text" value="${name === '-' ? '' : name}" class="form-input" id="editProfileName">`;
-        document.getElementById('profileEmail').innerHTML = `<input type="email" value="${email === '-' ? '' : email}" class="form-input" id="editProfileEmail">`;
-        document.getElementById('profilePhone').innerHTML = `<input type="tel" value="${phone === '-' ? '' : phone}" class="form-input" id="editProfilePhone">`;
-        document.getElementById('profileStreet').innerHTML = `<input type="text" value="${street === '-' ? '' : street}" class="form-input" id="editProfileStreet">`;
-        document.getElementById('profileCity').innerHTML = `<input type="text" value="${city === '-' ? '' : city}" class="form-input" id="editProfileCity">`;
-        document.getElementById('profileZip').innerHTML = `<input type="text" value="${zip === '-' ? '' : zip}" class="form-input" id="editProfileZip">`;
-        document.getElementById('profileCountry').innerHTML = `<input type="text" value="${country === '-' ? '' : country}" class="form-input" id="editProfileCountry">`;
-        
-        const editBtn = document.querySelector('#profilePage .btn-primary');
-        if (editBtn) {
-            editBtn.textContent = 'Save Changes';
-            editBtn.onclick = saveProfileChanges;
-        }
-    } else {
-        // Cancel edit mode without saving
-        profileInfo.classList.remove('edit-mode');
-        addressInfo.classList.remove('edit-mode');
-        displayProfileData(currentUser);
-        
-        const editBtn = document.querySelector('#profilePage .btn-primary');
-        if (editBtn) {
-            editBtn.textContent = 'Edit Profile';
-            editBtn.onclick = toggleEditMode;
-        }
-    }
-}
-
-// Save profile changes
-async function saveProfileChanges() {
-    if (!currentUser || !userToken) {
-        showMessage('profileMessage', 'You must be logged in to update your profile.', 'error');
-        return;
-    }
-    
-    const updatedData = {
-        name: document.getElementById('editProfileName')?.value || currentUser.name,
-        email: document.getElementById('editProfileEmail')?.value || currentUser.email,
-        phone: document.getElementById('editProfilePhone')?.value || currentUser.phone,
-        address: {
-            street: document.getElementById('editProfileStreet')?.value || currentUser.address?.street,
-            city: document.getElementById('editProfileCity')?.value || currentUser.address?.city,
-            zipCode: document.getElementById('editProfileZip')?.value || currentUser.address?.zipCode,
-            country: document.getElementById('editProfileCountry')?.value || currentUser.address?.country
-        }
-    };
-    
-    try {
-        showMessage('profileMessage', 'Updating profile...', 'success');
-        
-        const response = await fetch(`${API_URL}/api/users/${currentUser.id}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${userToken}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updatedData)
-        });
-
-        if (response.ok) {
-            const updatedUser = await response.json();
-            currentUser = { ...currentUser, ...updatedUser };
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            showMessage('profileMessage', 'Profile updated successfully!', 'success');
-            
-            // Exit edit mode
-            isEditMode = false;
-            const profileInfo = document.getElementById('profileInfo');
-            const addressInfo = document.getElementById('addressInfo');
-            profileInfo.classList.remove('edit-mode');
-            addressInfo.classList.remove('edit-mode');
-            
-            // Reload profile data
-            displayProfileData(currentUser);
-            
-            const editBtn = document.querySelector('#profilePage .btn-primary');
-            if (editBtn) {
-                editBtn.textContent = 'Edit Profile';
-                editBtn.onclick = toggleEditMode;
-            }
-        } else {
-            const errorData = await response.json();
-            showMessage('profileMessage', errorData.message || 'Failed to update profile. Please try again.', 'error');
-        }
-    } catch (error) {
-        console.error('Error updating profile:', error);
-        showMessage('profileMessage', 'Connection error. Please try again.', 'error');
-    }
-}
-
-function changePassword() {
-    const current = document.getElementById('currentPassword').value;
-    const newPass = document.getElementById('newPassword').value;
-    
-    if (!current || !newPass) {
-        showMessage('passwordMessage', 'Please fill in both fields', 'error');
-        return;
-    }
-    
-    // In a real app, you would make an API call to change the password
-    // For now, we'll just show a success message
-    showMessage('passwordMessage', 'Password updated successfully!', 'success');
-    document.getElementById('currentPassword').value = '';
-    document.getElementById('newPassword').value = '';
-}
-
-// For the home page navigation
-function showAuth(page) {
-    document.getElementById('homePage').classList.add('hidden');
-    document.getElementById('loginPage').classList.add('hidden');
-    document.getElementById('signupPage').classList.add('hidden');
-    
-    if (page === 'home') {
-        document.getElementById('homePage').classList.remove('hidden');
-        window.scrollTo(0, 0);
-    } else {
-        document.getElementById(page + 'Page').classList.remove('hidden');
-    }
-    
-    setTimeout(() => lucide.createIcons(), 0);
-}
-
-function showDashboardTab(tab) {
-    document.getElementById('overviewTab').classList.add('hidden');
-    document.getElementById('productsTab').classList.add('hidden');
-    document.getElementById('quizTab').classList.add('hidden');
-    
-    document.getElementById(tab + 'Tab').classList.remove('hidden');
-    
-    if (tab === 'products') {
-        loadProducts();
-    }
-    
-    setTimeout(() => lucide.createIcons(), 0);
-}
-
-// Quiz functions
 function startQuiz() {
+    if (!checkQuizAccess()) return;
+    
     currentQuestionIndex = 0;
     userAnswers = [];
     quizScore = 0;
     
-    document.getElementById('quizStart').classList.add('hidden');
-    document.getElementById('quizInProgress').classList.remove('hidden');
+    document.getElementById('quizStart').style.display = 'none';
+    document.getElementById('quizInProgress').style.display = 'block';
     
     showQuestion();
 }
@@ -747,17 +603,9 @@ function finishQuiz() {
         `);
     });
     
-    document.getElementById('quizInProgress').classList.add('hidden');
-    document.getElementById('quizResults').classList.remove('hidden');
+    document.getElementById('quizInProgress').style.display = 'none';
+    document.getElementById('quizResults').style.display = 'block';
     document.getElementById('finalScore').textContent = `${quizScore}/10`;
-    
-    // Store quiz score
-    localStorage.setItem('quizScore', quizScore);
-    
-    if (document.getElementById('dashboardQuizScore')) {
-        document.getElementById('dashboardQuizScore').textContent = `${quizScore}/10`;
-    }
-    
     document.getElementById('answersReview').innerHTML = reviewHTML.join('');
     
     let feedback = '';
@@ -770,96 +618,36 @@ function finishQuiz() {
 }
 
 function retakeQuiz() {
-    document.getElementById('quizResults').classList.add('hidden');
-    document.getElementById('quizStart').classList.remove('hidden');
+    document.getElementById('quizResults').style.display = 'none';
+    document.getElementById('quizStart').style.display = 'block';
 }
 
-// Additional functions for profile page
-function exportUserData() {
-    if (!currentUser) return;
+// Initialize on Page Load
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if we're on a protected page
+    const protectedPages = ['profile.html', 'quiz.html'];
+    const currentPage = window.location.pathname.split('/').pop();
     
-    const dataStr = JSON.stringify(currentUser, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `robo-club-profile-${currentUser.name || 'user'}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-    
-    showMessage('profileMessage', 'Your data has been exported!', 'success');
-}
-
-// Complete delete account functionality
-async function deleteAccount() {
-    if (!currentUser || !userToken) {
-        showMessage('profileMessage', 'You must be logged in to delete your account.', 'error');
-        return;
-    }
-    
-    if (!confirm('⚠️ ARE YOU SURE YOU WANT TO DELETE YOUR ACCOUNT?\n\nThis action is PERMANENT and cannot be undone. All your data will be lost.')) {
-        return;
-    }
-    
-    // Ask for confirmation with password
-    const password = prompt('Please enter your password to confirm account deletion:');
-    if (!password) {
-        showMessage('profileMessage', 'Account deletion cancelled.', 'error');
-        return;
-    }
-    
-    try {
-        showMessage('profileMessage', 'Deleting your account...', 'success');
-        
-        // First verify the password
-        const verifyResponse = await fetch(`${API_URL}/api/users/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                email: currentUser.email, 
-                password: password 
-            })
-        });
-        
-        if (!verifyResponse.ok) {
-            showMessage('profileMessage', 'Incorrect password. Account deletion cancelled.', 'error');
+    if (protectedPages.includes(currentPage)) {
+        const token = localStorage.getItem('userToken');
+        if (!token) {
+            window.location.href = 'login.html';
             return;
         }
-        
-        // If password is correct, delete the account
-        const deleteResponse = await fetch(`${API_URL}/api/users/${currentUser.id}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${userToken}`,
-                'Content-Type': 'application/json'
+    }
+    
+    // Load profile if on profile page
+    if (currentPage === 'profile.html') {
+        loadProfile();
+    }
+    
+    // Add Enter key support for login
+    const loginPassword = document.getElementById('loginPassword');
+    if (loginPassword) {
+        loginPassword.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleLogin();
             }
         });
-        
-        if (deleteResponse.ok) {
-            showMessage('profileMessage', 'Account successfully deleted. Redirecting to home page...', 'success');
-            
-            // Clear local storage and redirect
-            setTimeout(() => {
-                userToken = null;
-                currentUser = null;
-                localStorage.removeItem('userToken');
-                localStorage.removeItem('currentUser');
-                localStorage.removeItem('quizScore');
-                window.location.href = 'index.html';
-            }, 2000);
-            
-        } else {
-            const errorData = await deleteResponse.json();
-            showMessage('profileMessage', errorData.message || 'Failed to delete account. Please try again.', 'error');
-        }
-        
-    } catch (error) {
-        console.error('Error deleting account:', error);
-        showMessage('profileMessage', 'Connection error. Please try again.', 'error');
     }
-}
+});
