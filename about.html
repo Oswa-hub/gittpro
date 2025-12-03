@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - RoboClub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="home-page">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="home.html" class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                    RoboClub
+                </a>
+                <div class="nav-links" id="navLinks">
+                    <!-- Navigation will be populated by JavaScript -->
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            </div>
+            <!-- Mobile Menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <!-- Mobile menu will be populated by JavaScript -->
+            </div>
+        </nav>
+
+        <!-- About Hero -->
+        <section class="hero" style="padding-top: 150px; padding-bottom: 60px;">
+            <h1>About <span class="highlight">Our Club</span></h1>
+            <p style="max-width: 600px; margin: 0 auto;">Discover who we are and what drives us to innovate</p>
+        </section>
+
+        <!-- About Section -->
+        <section class="section section-alt">
+            <div class="section-container">
+                <h2>Our Mission</h2>
+                <p class="about-text">
+                    Our club is a dynamic community for students passionate about robots, innovation, and emerging technologies. 
+                    We work together to design, build, and program robots while exploring fields like artificial intelligence, 
+                    automation, and electronics. Through workshops, team projects, and competitions, we develop both technical 
+                    and creative problem-solving skills. Our goal is to inspire members to think differently, push boundaries, 
+                    and turn ideas into real, functioning prototypes. Whether you're a beginner or advanced, our club is the 
+                    perfect space to learn, collaborate, and shape the future of technology.
+                </p>
+            </div>
+        </section>
+
+        <!-- Vision Section -->
+        <section class="section">
+            <div class="section-container">
+                <h2>Our Vision</h2>
+                <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                    <div class="feature-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                        <h3>Innovation</h3>
+                        <p>We strive to push the boundaries of what's possible in robotics and automation, constantly exploring new technologies and methodologies.</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <h3>Collaboration</h3>
+                        <p>We believe in the power of teamwork and foster an inclusive environment where members support and learn from each other.</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                            <path d="M2 12l10 5 10-5"></path>
+                        </svg>
+                        <h3>Education</h3>
+                        <p>We are committed to continuous learning and provide comprehensive workshops, resources, and mentorship to all skill levels.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section class="section section-alt">
+            <div class="section-container">
+                <h2>Our Journey</h2>
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <div style="margin-bottom: 40px;">
+                        <h3 style="color: #a855f7; font-size: 1.5rem; margin-bottom: 10px;">2020 - Foundation</h3>
+                        <p style="color: #d1d5db; font-size: 1.1rem; line-height: 1.8;">
+                            RoboClub was founded by a group of passionate students who shared a vision of creating a collaborative 
+                            space for robotics enthusiasts. Starting with just 15 members, we organized our first workshop on Arduino basics.
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 40px;">
+                        <h3 style="color: #a855f7; font-size: 1.5rem; margin-bottom: 10px;">2021 - Growth</h3>
+                        <p style="color: #d1d5db; font-size: 1.1rem; line-height: 1.8;">
+                            Our membership grew to over 100 students. We participated in our first regional robotics competition 
+                            and won the Innovation Award for our autonomous navigation robot.
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 40px;">
+                        <h3 style="color: #a855f7; font-size: 1.5rem; margin-bottom: 10px;">2022 - Expansion</h3>
+                        <p style="color: #d1d5db; font-size: 1.1rem; line-height: 1.8;">
+                            We expanded our facilities, added AI and machine learning workshops, and established partnerships 
+                            with leading tech companies. Our members completed over 50 projects.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 style="color: #a855f7; font-size: 1.5rem; margin-bottom: 10px;">2023-Present - Excellence</h3>
+                        <p style="color: #d1d5db; font-size: 1.1rem; line-height: 1.8;">
+                            Today, RoboClub has over 500 active members and has won multiple national competitions. We continue 
+                            to push boundaries in robotics education and innovation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section">
+            <div class="section-container" style="text-align: center;">
+                <h2>Join Our Journey</h2>
+                <p style="color: #d1d5db; margin-bottom: 32px; font-size: 1.2rem;">Be part of something extraordinary. Join RoboClub today!</p>
+                <a href="signup.html" class="btn btn-primary" style="padding: 18px 40px; font-size: 18px;">Become a Member</a>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize navigation based on login status
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeNavigation();
+        });
+    </script>
+</body>
+</html>

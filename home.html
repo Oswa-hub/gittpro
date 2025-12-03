@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboClub - Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="home-page">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="home.html" class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                    RoboClub
+                </a>
+                <div class="nav-links" id="navLinks">
+                    <!-- Navigation will be populated by JavaScript -->
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            </div>
+            <div class="mobile-menu" id="mobileMenu">
+                <!-- Mobile menu will be populated by JavaScript -->
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Build the Future with <span class="highlight" style="color: #d1d5db;">Robotics</span></h1>
+            <p>Join our dynamic community of innovators, designers, and technologists shaping tomorrow's robots today.</p>
+            <div class="hero-buttons">
+                <a href="signup.html" class="btn btn-primary">Join Our Club</a>
+                <a href="contact.html" class="btn btn-secondary">Contact Us</a>
+            </div>
+        </section>
+
+        <!-- Quick Overview -->
+        <section class="section section-alt">
+            <div class="section-container">
+                <h2>Welcome to RoboClub</h2>
+                <p class="about-text" style="max-width: 800px;">
+                    We are a passionate community dedicated to robotics, innovation, and emerging technologies. 
+                    Explore our features, check out our amazing robots, and join us in shaping the future!
+                </p>
+                <div style="display: flex; gap: 20px; justify-content: center; margin-top: 40px; flex-wrap: wrap;">
+                    <a href="signup.html" class="btn btn-primary">Learn More</a>
+                    <a href="quiz.html" class="btn btn-secondary">Take Quiz</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Stats -->
+        <section class="section">
+            <div class="section-container">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 48px; height: 48px; color: #a855f7; margin-bottom: 16px;">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <h3>500+</h3>
+                        <p>Active Members</p>
+                    </div>
+                    <div class="stat-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 48px; height: 48px; color: #a855f7; margin-bottom: 16px;">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                        <h3>100+</h3>
+                        <p>Projects Completed</p>
+                    </div>
+                    <div class="stat-card">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 48px; height: 48px; color: #a855f7; margin-bottom: 16px;">
+                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                            <path d="M4 22h16"></path>
+                            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                        </svg>
+                        <h3>25+</h3>
+                        <p>Awards Won</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section section-alt">
+            <div class="section-container" style="text-align: center;">
+                <h2>Ready to Start Building?</h2>
+                <p style="color: #d1d5db; margin-bottom: 32px; font-size: 1.2rem;">Join our community today and turn your robotics dreams into reality!</p>
+                <a href="signup.html" class="btn btn-primary">Join Now</a>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize navigation based on login status
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeNavigation();
+        });
+    </script>
+</body>
+</html>
