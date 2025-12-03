@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RoboClub - Robotics Club</title>
+<<<<<<< HEAD
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+=======
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+>>>>>>> cf162c3bfc4931531c383145ec9abf9b41ede933
 </head>
 <body>
     <!-- Home Page -->
@@ -22,8 +27,13 @@
                     <a href="#about">About</a>
                     <a href="#features">Features</a>
                     <a href="#contact">Contact</a>
+<<<<<<< HEAD
                     <button class="btn btn-outline" onclick="showPage('login')">Log In</button>
                     <button class="btn btn-primary" onclick="showPage('signup')">Sign Up</button>
+=======
+                    <button class="btn btn-outline" onclick="showAuth('login')">Log In</button>
+                    <button class="btn btn-primary" onclick="showAuth('signup')">Sign Up</button>
+>>>>>>> cf162c3bfc4931531c383145ec9abf9b41ede933
                 </div>
 
                 <button class="menu-toggle" onclick="toggleMenu()">
@@ -36,8 +46,13 @@
                     <a href="#about" onclick="toggleMenu()">About</a>
                     <a href="#features" onclick="toggleMenu()">Features</a>
                     <a href="#contact" onclick="toggleMenu()">Contact</a>
+<<<<<<< HEAD
                     <button class="btn btn-outline" style="width: 100%;" onclick="showPage('login'); toggleMenu()">Log In</button>
                     <button class="btn btn-primary" style="width: 100%;" onclick="showPage('signup'); toggleMenu()">Sign Up</button>
+=======
+                    <button class="btn btn-outline" style="width: 100%;" onclick="showAuth('login'); toggleMenu()">Log In</button>
+                    <button class="btn btn-primary" style="width: 100%;" onclick="showAuth('signup'); toggleMenu()">Sign Up</button>
+>>>>>>> cf162c3bfc4931531c383145ec9abf9b41ede933
                 </div>
             </div>
         </nav>
@@ -48,7 +63,11 @@
                 <h1>Build the Future with <span class="highlight">Robotics</span></h1>
                 <p>Join our dynamic community of innovators, designers, and technologists shaping tomorrow's robots today.</p>
                 <div class="hero-buttons">
+<<<<<<< HEAD
                     <button class="btn-hero btn-primary" onclick="showPage('signup')">Join Our Club</button>
+=======
+                    <button class="btn-hero btn-primary" onclick="showAuth('signup')">Join Our Club</button>
+>>>>>>> cf162c3bfc4931531c383145ec9abf9b41ede933
                     <a href="#about" class="btn-hero btn-outline">Learn More</a>
                 </div>
             </div>
@@ -144,9 +163,15 @@
             <div class="auth-footer">
                 <p>
                     Don't have an account? 
+<<<<<<< HEAD
                     <button onclick="showPage('signup')">Sign Up</button>
                 </p>
                 <button class="back-link" onclick="showPage('home')">← Back to Home</button>
+=======
+                    <button onclick="showAuth('signup')">Sign Up</button>
+                </p>
+                <button class="back-link" onclick="showAuth('home')">← Back to Home</button>
+>>>>>>> cf162c3bfc4931531c383145ec9abf9b41ede933
             </div>
         </div>
     </div>
@@ -227,13 +252,38 @@
             <div class="auth-footer">
                 <p>
                     Already have an account? 
+<<<<<<< HEAD
                     <button onclick="showPage('login')">Log In</button>
                 </p>
                 <button class="back-link" onclick="showPage('home')">← Back to Home</button>
+=======
+                    <button onclick="showAuth('login')">Log In</button>
+                </p>
+                <button class="back-link" onclick="showAuth('home')">← Back to Home</button>
+>>>>>>> cf162c3bfc4931531c383145ec9abf9b41ede933
             </div>
         </div>
     </div>
 
     <script src="script.js"></script>
+<<<<<<< HEAD
+=======
+    <script>
+        function showAuth(page) {
+            document.getElementById('homePage').classList.add('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('signupPage').classList.add('hidden');
+            
+            if (page === 'home') {
+                document.getElementById('homePage').classList.remove('hidden');
+                window.scrollTo(0, 0);
+            } else {
+                document.getElementById(page + 'Page').classList.remove('hidden');
+            }
+            
+            setTimeout(() => lucide.createIcons(), 0);
+        }
+    </script>
+>>>>>>> cf162c3bfc4931531c383145ec9abf9b41ede933
 </body>
 </html>
