@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotics Quiz - RoboClub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="home-page">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="home.html" class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                    RoboClub
+                </a>
+                <div class="nav-links">
+                    <a href="home.html">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="features.html">Features</a>
+                    <a href="robots.html">Robots</a>
+                    <a href="quiz.html">Quiz</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="profile.html">Profile</a>
+                    <button class="btn btn-outline" onclick="handleLogout()">Logout</button>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            </div>
+            <!-- Mobile Menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <a href="home.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="features.html">Features</a>
+                <a href="robots.html">Robots</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="contact.html">Contact</a>
+                <a href="profile.html">Profile</a>
+                <button class="btn btn-outline" onclick="handleLogout()" style="margin: 10px 0; width: 100%;">Logout</button>
+            </div>
+        </nav>
+
+        <!-- Quiz Section -->
+        <section class="section" style="padding-top: 120px;">
+            <div class="section-container">
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <!-- Quiz Start -->
+                    <div id="quizStart" style="background: rgba(30, 41, 59, 0.6); padding: 60px 40px; border-radius: 24px; border: 1px solid rgba(168, 85, 247, 0.3); text-align: center;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 80px; height: 80px; color: #a855f7; margin: 0 auto 24px;">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <h1 style="font-size: 2.5rem; margin-bottom: 16px;">Test Your Robotics Knowledge!</h1>
+                        <p style="color: #d1d5db; margin-bottom: 32px; font-size: 1.2rem;">Answer 10 questions about robotics and our club</p>
+                        <button class="btn btn-primary" style="padding: 18px 40px; font-size: 18px;" onclick="startQuiz()">
+                            Start Quiz
+                        </button>
+                    </div>
+
+                    <!-- Quiz In Progress -->
+                    <div id="quizInProgress" style="display: none;">
+                        <div style="background: rgba(30, 41, 59, 0.6); padding: 40px; border-radius: 24px; border: 1px solid rgba(168, 85, 247, 0.3);">
+                            <div style="text-align: center; margin-bottom: 32px;">
+                                <h2 style="font-size: 1.8rem; margin-bottom: 16px;">Question <span id="currentQuestion">1</span> of 10</h2>
+                                <div style="background: rgba(51, 65, 85, 0.6); height: 12px; border-radius: 20px; overflow: hidden;">
+                                    <div id="quizProgressBar" style="height: 100%; background: linear-gradient(90deg, #9333ea, #ec4899); width: 10%; transition: width 0.3s;"></div>
+                                </div>
+                            </div>
+                            
+                            <div id="quizQuestionContainer"></div>
+                            
+                            <div style="display: flex; gap: 16px; margin-top: 32px; justify-content: space-between;">
+                                <button class="btn btn-outline" onclick="previousQuestion()" id="prevBtn" disabled>Previous</button>
+                                <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn">Next</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Results -->
+                    <div id="quizResults" style="display: none;">
+                        <div style="background: rgba(30, 41, 59, 0.6); padding: 60px 40px; border-radius: 24px; border: 1px solid rgba(168, 85, 247, 0.3); text-align: center;">
+                            <h2 style="font-size: 2.5rem; margin-bottom: 24px;">Quiz Complete!</h2>
+                            <div id="finalScore" style="font-size: 4rem; font-weight: bold; background: linear-gradient(135deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 16px;">0/10</div>
+                            <div id="quizFeedback" style="color: #d1d5db; font-size: 1.3rem; margin-bottom: 32px;"></div>
+                            <button class="btn btn-primary" style="padding: 18px 40px; font-size: 18px;" onclick="retakeQuiz()">Retake Quiz</button>
+                            
+                            <div style="background: rgba(51, 65, 85, 0.6); padding: 32px; border-radius: 16px; margin-top: 40px; text-align: left;">
+                                <h3 style="font-size: 1.5rem; margin-bottom: 24px; text-align: center;">Your Answers:</h3>
+                                <div id="answersReview"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <style>
+        .quiz-question {
+            margin-bottom: 24px;
+        }
+
+        .quiz-question h3 {
+            font-size: 1.4rem;
+            color: white;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .quiz-option {
+            background: rgba(51, 65, 85, 0.6);
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            cursor: pointer;
+            color: #d1d5db;
+            transition: all 0.3s;
+            font-size: 1.05rem;
+        }
+
+        .quiz-option:hover {
+            border-color: #9333ea;
+            background: rgba(147, 51, 234, 0.2);
+            transform: translateX(8px);
+        }
+
+        .quiz-option.selected {
+            border-color: #9333ea;
+            background: rgba(147, 51, 234, 0.3);
+            color: white;
+            font-weight: 600;
+        }
+
+        .quiz-answer {
+            padding: 20px;
+            margin-bottom: 16px;
+            border-radius: 12px;
+            background: rgba(30, 41, 59, 0.6);
+        }
+
+        .quiz-answer.correct {
+            border-left: 4px solid #4ade80;
+        }
+
+        .quiz-answer.incorrect {
+            border-left: 4px solid #f87171;
+        }
+
+        .quiz-answer p {
+            color: #d1d5db;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .quiz-answer .answer-text {
+            color: white;
+            font-weight: 600;
+        }
+    </style>
+
+    <script src="script.js"></script>
+</body>
+</html>
